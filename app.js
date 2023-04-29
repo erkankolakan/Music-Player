@@ -21,6 +21,7 @@ window.addEventListener("load" , () => {
     let  music = player.getMusic(); //player sayesinde şarkıcı bilgilerini alır ve 
     displayMusic(music);
     displayMusicList(player.musicList);
+    isPlayingNow();
 })
 
     function displayMusic(music){
@@ -37,6 +38,7 @@ window.addEventListener("load" , () => {
     })
     prev.addEventListener("click" , () => {  //????????????????? 32-50 ???????????????????
         prevMusic();
+        isPlayingNow();
     })
     const prevMusic = () => {   
 
@@ -48,6 +50,7 @@ window.addEventListener("load" , () => {
 
     next.addEventListener("click" , () => { 
         nextMusic()
+        isPlayingNow();
     })
     const nextMusic = () => {
         player.next()
@@ -136,7 +139,7 @@ window.addEventListener("load" , () => {
 let displayMusicList = (list) => {
     for (let i=0; i < list.length; i++) {
         let liTag=`
-            <li class="list-group-item d-flex justify-content-between align-items-center">
+            <li li-index='${i}' onclick="selectedMusic(this)"class="list-group-item d-flex justify-content-between align-items-center">
                 <span>${list[i].getName()}</span>
                 <span id="music-${i}" class="badge bg-primary rounded-pill"></span>
             </li>
@@ -147,20 +150,37 @@ let displayMusicList = (list) => {
 
             let liAudioDuration = ul.querySelector(`#music-${i}`); //id
             let liAudioTag = ul.querySelector(`.music-${i}`); //class
-        liAudioTag.addEventListener("loadeddata", () => { 
+            liAudioTag.addEventListener("loadeddata", () => { 
             liAudioDuration.innerText = calculateTime(liAudioTag.duration)
         } )
 // loadeddata dosyayı inceler e saniye cinsinden şarkının kaç saniye olduğunu bulur.
 
-
-
-
-
-
     }
 }
 
+const selectedMusic = (li) =>{
+    player.index = li.getAttribute("li-index");
+    //playerin in index numarasını listenin index numarsı ile değiştiriyoruz.
+    //sayfa yüklendiği zaman zaten bizim listedeki değerler displaMusicList aracılığıyla takır takır içine değerler yazılıp listeleniyor.
+    displayMusic(player.getMusic());
+    playMusic();
+    isPlayingNow();
+}
 
 
+const isPlayingNow = () => {
+    for(let li of ul.querySelectorAll("li")){
+        if (li.classList.contains("playing")) {
+            li.classList.remove("playing");
+        }
 
-    
+        if (li.getAttribute("li-index") == player.index) {
+            li.classList.add("playing")
+        }
+    } 
+}
+
+audio.addEventListener("ended" , () =>{
+    nextMusic();
+//şarkı bitince bu fonksiyonu uygula.
+})

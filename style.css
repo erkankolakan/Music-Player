@@ -21,3 +21,8 @@ body{
 .volume-container i {
     margin-right:5px ;
 }
+
+li.playing{
+    background-color:rgb(0, 89, 158);
+    color: #fff;
+}

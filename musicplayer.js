@@ -10,7 +10,7 @@ class MusicPlayer {
     }
 
     next(){
-        if (this.musicList.length != this.index + 1 ) {
+        if (this.musicList.length > this.index + 1 ) {
             this.index++;
         }
         else {

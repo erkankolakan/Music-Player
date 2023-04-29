@@ -10,10 +10,7 @@ const currentTime = document.querySelector("#current-time");
 const progressBar = document.querySelector("#progress-bar");
 const volume = document.querySelector("#volume");
 const volumeBar = document.querySelector("#volume-bar");
-
-
-
-
+const ul = document.querySelector("ul");
 
 
 
@@ -23,6 +20,7 @@ window.addEventListener("load" , () => {
 //sayffa yüklendiği zaman bu fonksiyonu uygula.
     let  music = player.getMusic(); //player sayesinde şarkıcı bilgilerini alır ve 
     displayMusic(music);
+    displayMusicList(player.musicList);
 })
 
     function displayMusic(music){
@@ -60,13 +58,13 @@ window.addEventListener("load" , () => {
 
     const pauseMusic = () => {
         container.classList.remove("playing")
-        play.classList = "fa-solid fa-play"
+        play.querySelector("i").classList = "fa-solid fa-play"
         audio.pause(); // pasuse,play audio elementi ile alakalı bir metot.
     }
 
     const playMusic = () => {
         container.classList.add("playing")
-        play.classList = "fa-solid fa-pause"
+        play.querySelector("i").classList = "fa-solid fa-pause"
         audio.play();
     }
 
@@ -133,6 +131,34 @@ window.addEventListener("load" , () => {
             volumeBar.value= "50";
         }
     })
+    
+
+let displayMusicList = (list) => {
+    for (let i=0; i < list.length; i++) {
+        let liTag=`
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span>${list[i].getName()}</span>
+                <span id="music-${i}" class="badge bg-primary rounded-pill"></span>
+            </li>
+            <audio class="music-${i}" src="mp3/${list[i].file}" ></audio>
+        `;
+
+        ul.insertAdjacentHTML("beforeend", liTag);
+
+            let liAudioDuration = ul.querySelector(`#music-${i}`); //id
+            let liAudioTag = ul.querySelector(`.music-${i}`); //class
+        liAudioTag.addEventListener("loadeddata", () => { 
+            liAudioDuration.innerText = calculateTime(liAudioTag.duration)
+        } )
+// loadeddata dosyayı inceler e saniye cinsinden şarkının kaç saniye olduğunu bulur.
+
+
+
+
+
+
+    }
+}
 
 
 
